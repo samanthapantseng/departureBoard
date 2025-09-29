@@ -22,39 +22,30 @@
     line-height: 1.18;
 }
 
-.db-train-type-square .db-train-number {
-    font-weight: 400;
-    margin-left: 0.3em;
-}
-/* 4x4 Departure Board Layout */
-.departure-board-4x4 {
+/* 8x4 Departure Board Layout */
+.departure-board-8x4 {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(8, 1fr);
     width: 100vw;
     height: 100vh;
     min-height: 100vh;
     min-width: 100vw;
-    background: none;
     box-sizing: border-box;
 }
-.departure-board-4x4 .db-row {
-    display: contents;
-}
-.departure-board-4x4 .db-cell {
+
+.departure-board-8x4 .db-cell {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     color: #fff;
-    padding: 2vw 2vw;
+    padding: 2vw;
     box-sizing: border-box;
-    border: none;
-    background: none;
-    min-width: 0;
-    min-height: 0;
     overflow: hidden;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+/* Row 1 */
 .db-train-type-box {
     grid-row: 1;
     grid-column: 1;
@@ -64,7 +55,6 @@
     background: #d60036;
     color: #fff;
     font-weight: 700;
-    border-radius: 0;
     padding: 0.3em 1.1em;
     display: inline-flex;
     align-items: center;
@@ -74,178 +64,74 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
     letter-spacing: 0.04em;
 }
-.db-departure-time,
-.db-arrival-time,
-.db-current-time {
-    white-space: nowrap;
-    align-items: center;
-    display: flex;
-    gap: 0.5em;
+.db-departure-time {
+    grid-row: 1;
+    grid-column: 2;
+    font-weight: 600;
+    color: #fff;
 }
 .db-arrival-time {
+    grid-row: 1;
+    grid-column: 4;
+    color: #fff;
     opacity: 0.5;
     font-weight: 400;
 }
 .db-current-time {
+    grid-row: 1;
+    grid-column: 8;
     opacity: 0.8;
     justify-content: flex-end;
 }
 .db-current-colon {
     transition: opacity 0.2s;
 }
+
+/* Row 2 */
 .db-destination {
-    color: #fff;
-    background: none;
-    border: none;
-    padding: 2vw 2vw;
     grid-row: 2;
-    grid-column: 1 / span 2;
-    align-items: center;
-}
-.db-track {
-    color: #d60036;
-    font-weight: 700;
-    grid-row: 2;
-    grid-column: 3;
-    align-items: center;
-}
-.db-track-label {
-    font-weight: 400;
-    color: #fff;
-    margin-right: 0.2em;
-}
-.db-track-num {
-    color: #d60036;
-    font-weight: 700;
-}
-.db-via {
-    color: #fff;
-    background: none;
-    border: none;
-    padding: 2vw 2vw;
-    grid-row: 3;
     grid-column: 1 / span 3;
-    align-items: center;
-}
-.db-stop {
-    margin-right: 2vw;
-    white-space: nowrap;
-    font-weight: 500;
-    color: #fff;
-}
-/* Responsive departure board layout */
-.departure-board-table-responsive {
-    display: flex;
-    flex-direction: column;
-    width: 66vw;
-    min-width: 320px;
-    max-width: 1200px;
-    height: 66vh;
-    min-height: 320px;
-    margin: 4vh 0 0 5vw;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background: none;
-    box-shadow: none;
-    border-radius: 0;
-    justify-content: center;
-}
-.db-row {
-    display: flex;
-    width: 100%;
-    height: 33.33%;
-}
-.db-cell {
-    flex: 1 1 0;
-    padding: 2vw 2vw;
-    color: #fff;
-    text-align: left;
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-left: 2vw;
-    margin-right: 2vw;
-}
-.db-row:last-child .db-cell {
-    border-bottom: none;
-}
-.db-train {
-    min-width: 120px;
-    display: flex;
-    align-items: center;
-}
-.db-train-type {
-    background: #d60036;
-    color: #fff;
-    font-weight: 700;
-    border-radius: 0.5em;
-    padding: 0.2em 0.7em;
-    margin-right: 0.5em;
-    letter-spacing: 0.04em;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    display: inline-block;
-}
-.db-train-number {
-    color: #fff;
-    font-weight: 400;
-    margin-left: 0.2em;
-}
-.db-time {
-    text-align: left;
-    justify-content: flex-start;
-    min-width: 120px;
-    display: flex;
-    align-items: baseline;
-    gap: 1.2em;
-}
-.db-departure-time {
-    font-weight: 600;
-    color: #fff;
-}
-.db-arrival-time {
-    color: #fff;
-    opacity: 0.45;
-    margin-left: 0.7em;
-    font-weight: 400;
-}
-.db-track {
-    color: #d60036;
-    font-weight: 700;
-    text-align: left;
-    justify-content: flex-start;
-    min-width: 120px;
-}
-.db-track-label {
-    font-weight: 400;
-    color: #fff;
-    margin-right: 0.2em;
-}
-.db-track-num {
-    color: #d60036;
-    font-weight: 700;
-}
-.db-destination {
     font-weight: bold;
     color: #fff;
-    justify-content: flex-start;
-    text-align: left;
-    background: none;
-    border: none;
-    flex: 1 1 100%;
-    padding-top: 2vw;
-    padding-bottom: 2vw;
-    margin-left: 2vw;
+    align-items: center;
 }
-.db-via {
+.db-track {
+    grid-row: 2;
+    grid-column: 4;
+    color: #d60036;
+    font-weight: 700;
+    align-items: center;
+}
+.db-track-label {
+    font-weight: 400;
     color: #fff;
-    justify-content: flex-start;
-    text-align: left;
-    background: none;
-    flex: 1 1 100%;
+    margin-right: 0.2em;
+}
+.db-track-num {
+    color: #d60036;
+    font-weight: 700;
+}
+#destinationImageCell {
+    grid-row: 2;
+    grid-column: 8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#destinationImageCell img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Row 3 */
+.db-via {
+    grid-row: 3;
+    grid-column: 1 / span 4;
+    color: #fff;
     padding-top: 2vw;
     padding-bottom: 2vw;
-    margin-left: 2vw;
+    font-weight: 500;
 }
 .db-stop {
     margin-right: 2vw;
@@ -253,75 +139,13 @@
     font-weight: 500;
     color: #fff;
 }
-.departure-board {
-    background: rgba(0, 0, 0, 0.12);
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem 2rem 2rem 2rem;
-    min-width: 340px;
-    max-width: 95vw;
-    margin: 2rem auto 0 auto;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+/* Row 4 (empty for spacing/future expansion) */
+.departure-board-8x4 .db-row:last-child .db-cell {
+    border-bottom: none;
 }
-.board-header {
-    font-weight: 700;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #fff;
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.5rem;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-}
-.board-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.7rem;
-}
-.board-next {
-    font-weight: 600;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 10px;
-    padding: 1.1rem 0.7rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-}
-.board-train {
-    min-width: 80px;
-    color: #d60036;
-    font-weight: 700;
-}
-.train-type {
-    color: #d60036;
-    font-weight: 700;
-}
-.train-number {
-    color: #fff;
-    font-weight: 400;
-    margin-left: 0.2em;
-}
-.board-time {
-    min-width: 90px;
-    text-align: center;
-}
-.board-via {
-    flex: 1 1 0;
-    margin: 0 1.2em;
-    text-align: left;
-    color: #fff;
-}
-.board-track {
-    min-width: 60px;
-    text-align: center;
-    color: #d60036;
-    font-weight: 700;
-}
-.board-error {
-    color: #d60036;
-    text-align: center;
-    margin-top: 2em;
-}
+
+/* Body + Screens */
 body {
     background: #0057ba;
     color: #fff;
@@ -347,6 +171,15 @@ body {
     letter-spacing: 1px;
 }
 
+.loading-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    font-size: 2rem;
+    color: #999;
+}
+
 #locationInput {
     padding: 1rem;
     border-radius: 8px;
@@ -355,20 +188,4 @@ body {
     max-width: 80vw;
     outline: none;
     margin-bottom: 1rem;
-}
-
-#jsonData {
-    color: #fff;
-    background: none;
-    border: none;
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-width: 90vw;
-    min-height: 2em;
-}
-
-#destinationImageCell img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
 }

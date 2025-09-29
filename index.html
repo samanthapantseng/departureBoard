@@ -17,65 +17,60 @@
             />
         </div>
         <div id="resultScreen" class="screen" style="display: none">
-            <div class="departure-board-4x4">
+            <div class="departure-board-8x4">
                 <!-- Row 1 -->
-                <div class="db-row">
-                    <div class="db-cell db-train-type-box">
-                        <span class="db-train-type-square h3">
-                            <span id="trainType"></span>
-                            <span id="trainNumber" class="h3"></span>
-                        </span>
-                    </div>
-                    <div
-                        class="db-cell db-departure-time h3"
-                        id="departureTime"
-                    ></div>
-                    <div
-                        class="db-cell db-arrival-time h3"
-                        id="arrivalTime"
-                    ></div>
-                    <div
-                        class="db-cell db-current-time h3"
-                        id="localTimeCell"
-                    ></div>
+                <div
+                    class="db-cell db-train-type-box h3"
+                    style="grid-row: 1; grid-column: 1"
+                >
+                    <span class="db-train-type-square">
+                        <span id="trainType"></span>
+                        <span id="trainNumber"></span>
+                    </span>
                 </div>
 
+                <div
+                    class="db-cell db-departure-time h3"
+                    style="grid-row: 1; grid-column: 2"
+                    id="departureTime"
+                ></div>
+
+                <div
+                    class="db-cell db-arrival-time h3"
+                    style="grid-row: 1; grid-column: 4"
+                    id="arrivalTime"
+                ></div>
+                <div
+                    class="db-cell db-current-time h3"
+                    style="grid-row: 1; grid-column: 8"
+                    id="localTimeCell"
+                ></div>
+
                 <!-- Row 2 -->
-                <div class="db-row">
-                    <div
-                        class="db-cell db-destination h1"
-                        style="grid-column: 1 / span 2"
-                    >
-                        <b id="apiDestination">Waiting for input…</b>
-                    </div>
-                    <div
-                        class="db-cell db-track h3"
-                        style="grid-column: 3 / span 1"
-                    >
-                        <span id="trackInfo"></span>
-                    </div>
-                    <div class="db-cell" id="destinationImageCell">
-                        <span style="color: #999">No image</span>
-                    </div>
+                <div
+                    class="db-cell db-destination h1"
+                    style="grid-row: 2; grid-column: 1 / span 3"
+                >
+                    <b id="apiDestination">Waiting for input…</b>
+                </div>
+
+                <div
+                    class="db-cell db-track h3"
+                    style="grid-row: 2; grid-column: 4"
+                >
+                    <span id="trackInfo"></span>
+                </div>
+
+                <div class="db-cell" id="destinationImageCell">
+                    <span style="color: #999">No image</span>
                 </div>
 
                 <!-- Row 3 -->
-                <div class="db-row">
-                    <div
-                        class="db-cell db-via h2"
-                        style="grid-column: 1 / span 3"
-                        id="viaStations"
-                    ></div>
-                    <div class="db-cell"></div>
-                </div>
-
-                <!-- Row 4 -->
-                <div class="db-row">
-                    <div class="db-cell"></div>
-                    <div class="db-cell"></div>
-                    <div class="db-cell"></div>
-                    <div class="db-cell"></div>
-                </div>
+                <div
+                    class="db-cell db-via h2"
+                    style="grid-row: 3; grid-column: 1 / span 7"
+                    id="viaStations"
+                ></div>
             </div>
         </div>
 
