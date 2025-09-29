@@ -52,6 +52,7 @@ function renderDepartureBoard(connection, destinationInput) {
             allStops = allStops.concat(stops.map((stop) => stop.station.name));
         }
     });
+
     // Manual list of major Swiss stations
     const majorStations = [
         "Zürich HB",
@@ -76,12 +77,22 @@ function renderDepartureBoard(connection, destinationInput) {
         "Brig",
         "Zug",
         "Yverdon-les-Bains",
+        "Gotthard-Basistunnel",
     ];
-    // Remove duplicates, preserve order
-    allStops = [...new Set(allStops)];
-    // First, select all major stations that are in the stops
-    let via = majorStations.filter((station) => allStops.includes(station));
-    // If less than 4, fill with next stops in order
+
+    /*
+    // Remove duplicates while keeping travel order
+    let seen = new Set();
+    allStops = allStops.filter((stop) => {
+        if (seen.has(stop)) return false;
+        seen.add(stop);
+        return true;
+    });
+
+    // Highlight only the major stations that appear in the journey
+    let via = allStops.filter((stop) => majorStations.includes(stop));
+
+    // If less than 4, fill with next stops in travel order
     if (via.length < 4) {
         for (let stop of allStops) {
             if (!via.includes(stop)) {
@@ -90,7 +101,21 @@ function renderDepartureBoard(connection, destinationInput) {
             }
         }
     }
-    // If still less than 4, that's all we have
+
+    */
+
+    let via = allStops.filter((stop) => majorStations.includes(stop));
+    if (via.length < 4) {
+        via = [
+            ...via,
+            ...allStops.filter((stop) => !majorStations.includes(stop)),
+        ];
+    }
+    via = via.slice(0, 4);
+
+    // Debug: show all stops and which ones are highlighted
+    console.log("All stops from passList:", allStops);
+    console.log("Highlighted major stations (via):", via);
 
     // Blinking colon for current time, CET
     function getCurrentTimeHTML() {
@@ -144,15 +169,36 @@ async function loadData(toLocation) {
         const response = await fetch(url);
         if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
+
         const data = await response.json();
+        console.log("API response for:", toLocation, data);
+
+        // Loop over each connection and print its passList
+        data.connections.forEach((conn, i) => {
+            conn.sections.forEach((section, j) => {
+                if (section.journey && section.journey.passList) {
+                    console.log(
+                        `Connection ${i + 1}, Section ${j + 1} passList:`,
+                        section.journey.passList.map((stop) => ({
+                            station: stop.station.name,
+                            arrival: stop.arrival,
+                            departure: stop.departure,
+                        }))
+                    );
+                }
+            });
+        });
+
         const connection =
             data.connections && data.connections.length > 0
                 ? data.connections[0]
                 : null;
+
         document.getElementById("jsonData").innerHTML = renderDepartureBoard(
             connection,
             toLocation
         );
+
         // Start or restart local time updater
         if (window._localTimeInterval) clearInterval(window._localTimeInterval);
         let colonVisible = true;
