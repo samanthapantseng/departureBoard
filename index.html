@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>My Web App</title>
+        <title>Departure Board</title>
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
@@ -17,8 +17,68 @@
             />
         </div>
         <div id="resultScreen" class="screen" style="display: none">
-            <pre id="jsonData">Waiting for input...</pre>
+            <div class="departure-board-4x4">
+                <!-- Row 1 -->
+                <div class="db-row">
+                    <div class="db-cell db-train-type-box">
+                        <span class="db-train-type-square h3">
+                            <span id="trainType"></span>
+                            <span id="trainNumber" class="h3"></span>
+                        </span>
+                    </div>
+                    <div
+                        class="db-cell db-departure-time h3"
+                        id="departureTime"
+                    ></div>
+                    <div
+                        class="db-cell db-arrival-time h3"
+                        id="arrivalTime"
+                    ></div>
+                    <div
+                        class="db-cell db-current-time h3"
+                        id="localTimeCell"
+                    ></div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="db-row">
+                    <div
+                        class="db-cell db-destination h1"
+                        style="grid-column: 1 / span 2"
+                    >
+                        <b id="apiDestination">Waiting for input…</b>
+                    </div>
+                    <div
+                        class="db-cell db-track h3"
+                        style="grid-column: 3 / span 1"
+                    >
+                        <span id="trackInfo"></span>
+                    </div>
+                    <div class="db-cell" id="destinationImageCell">
+                        <span style="color: #999">No image</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="db-row">
+                    <div
+                        class="db-cell db-via h2"
+                        style="grid-column: 1 / span 3"
+                        id="viaStations"
+                    ></div>
+                    <div class="db-cell"></div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="db-row">
+                    <div class="db-cell"></div>
+                    <div class="db-cell"></div>
+                    <div class="db-cell"></div>
+                    <div class="db-cell"></div>
+                </div>
+            </div>
         </div>
+
         <script src="js/main.js"></script>
     </body>
 </html>

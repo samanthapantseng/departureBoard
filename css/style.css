@@ -366,3 +366,9 @@ body {
     max-width: 90vw;
     min-height: 2em;
 }
+
+#destinationImageCell img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
