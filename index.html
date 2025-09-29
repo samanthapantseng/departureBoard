@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Web App</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div id="searchScreen" class="screen">
+            <h1 class="prompt">Where are you going?</h1>
+            <input
+                type="text"
+                id="locationInput"
+                placeholder="Enter your destination..."
+                autocomplete="off"
+            />
+        </div>
+        <div id="resultScreen" class="screen" style="display: none">
+            <pre id="jsonData">Waiting for input...</pre>
+        </div>
+        <script src="js/main.js"></script>
+    </body>
+</html>
