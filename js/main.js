@@ -13,7 +13,7 @@ function formatTime(dateString) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-function updateDepartureBoard(connection, destinationInput) {
+async function updateDepartureBoard(connection, destinationInput) {
     if (!connection) {
         document.getElementById("apiDestination").textContent =
             "No departures found";
@@ -86,6 +86,7 @@ function updateDepartureBoard(connection, destinationInput) {
         "Zug",
         "Yverdon-les-Bains",
         "Gotthard-Basistunnel",
+        "Fribourg/Freiburg",
     ];
 
     let via = allStops.filter((stop) => majorStations.includes(stop));
@@ -104,6 +105,11 @@ function updateDepartureBoard(connection, destinationInput) {
     // Debug: show all stops and which ones are highlighted
     console.log("All stops from passList:", allStops);
     console.log("Highlighted major stations (via):", via);
+
+    const imagePromises = via.map((stop) => fetchUnsplashImage(stop));
+    const images = await Promise.all(imagePromises);
+
+    console.log("Images for stops:", images);
 }
 
 // Unsplash
@@ -204,12 +210,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // LEFT / RIGHT MONITORS
     // -------------------
     if (side === "left" || side === "right") {
-        let startCol = side === "left" ? 1 : 5;
-        let endCol = side === "left" ? 4 : 8;
+        const board = document.querySelector(".departure-board-8x4");
+
+        // Make grid 4 columns only
+        board.style.gridTemplateColumns = "repeat(4, 1fr)";
 
         const allCells = document.querySelectorAll(
             ".departure-board-8x4 .db-cell, #destinationImageCell"
         );
+
         allCells.forEach((cell) => {
             const gridColumn = cell.style.gridColumn;
             if (gridColumn) {
@@ -219,8 +228,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     ? parseInt(parts[1].replace("span", "").trim())
                     : 1;
                 const end = parts[1] ? start + span - 1 : start;
-                if (end < startCol || start > endCol)
-                    cell.style.display = "none";
+
+                if (side === "left") {
+                    // Keep only columns 1–4
+                    if (end > 4) {
+                        cell.style.display = "none";
+                    }
+                } else if (side === "right") {
+                    // Keep only columns 5–8, remap to 1–4
+                    if (start < 5) {
+                        cell.style.display = "none";
+                    } else {
+                        const newStart = start - 4;
+                        cell.style.gridColumn = `${newStart} / span ${span}`;
+                    }
+                }
             }
         });
 
