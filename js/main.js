@@ -89,11 +89,17 @@ async function updateDepartureBoard(connection, destinationInput) {
         "Fribourg/Freiburg",
     ];
 
+    const bannedStations = ["Bahn-2000-Strecke"];
+
     let via = allStops.filter((stop) => majorStations.includes(stop));
     if (via.length < 4) {
         via = [
             ...via,
-            ...allStops.filter((stop) => !majorStations.includes(stop)),
+            ...allStops.filter(
+                (stop) =>
+                    !majorStations.includes(stop) &&
+                    !bannedStations.includes(stop)
+            ),
         ];
     }
     via = via.slice(0, 4);
@@ -109,7 +115,15 @@ async function updateDepartureBoard(connection, destinationInput) {
     const imagePromises = via.map((stop) => fetchUnsplashImage(stop));
     const images = await Promise.all(imagePromises);
 
-    console.log("Images for stops:", images);
+    const imageCell = document.getElementById("destinationImageCell");
+    if (images && imageCell) {
+        new SimpleCarousel(imageCell, images, via, {
+            gap: 16,
+            height: 800,
+        });
+    } else if (imageCell) {
+        imageCell.innerHTML = `<span style="color:#999;">No image</span>`; // clear if no image
+    }
 }
 
 // Unsplash
@@ -163,15 +177,6 @@ async function loadData(toLocation) {
                 : null;
 
         updateDepartureBoard(connection, toLocation);
-
-        // Fetch Unsplash image based on user input
-        const imageUrl = await fetchUnsplashImage(toLocation);
-        const imageCell = document.getElementById("destinationImageCell");
-        if (imageUrl && imageCell) {
-            imageCell.innerHTML = `<img src="${imageUrl}" alt="${toLocation}" style="width:100%; height:auto; border-radius:4px;">`;
-        } else if (imageCell) {
-            imageCell.innerHTML = `<span style="color:#999;">No image</span>`; // clear if no image
-        }
 
         // Local time updater
         if (window._localTimeInterval) clearInterval(window._localTimeInterval);
