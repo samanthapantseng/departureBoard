@@ -134,16 +134,16 @@ async function updateDepartureBoard(connection, destinationInput) {
 // Unsplash
 async function fetchUnsplashImage(query) {
     const accessKey = "EUacxq3MNy1wrTdJPLIvX9ngjfoihypnD-Dooh6uSrg"; // Unsplash Access Key
-    const url = `https://api.unsplash.com/photos/random?query=${encodeURIComponent(
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
         query
-    )}&orientation=landscape&client_id=${accessKey}`;
+    )}&content_filter=high&client_id=${accessKey}`;
 
     try {
         const response = await fetch(url);
         if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
-        return data.urls.regular; // usable image URL
+        return data.results[Math.floor(Math.random() * 5)].urls.regular;
     } catch (error) {
         console.error(error);
         return null; // fallback if API fails
