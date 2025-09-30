@@ -96,6 +96,7 @@ function updateDepartureBoard(connection, destinationInput) {
         ];
     }
     via = via.slice(0, 4);
+
     document.getElementById("viaStations").innerHTML = via
         .map((stop) => `<span class="db-stop">${stop}</span>`)
         .join(" ");
@@ -192,40 +193,84 @@ async function loadData(toLocation) {
     }
 }
 
-// Input listeners
 document.addEventListener("DOMContentLoaded", () => {
-    const locationInput = document.getElementById("locationInput");
+    const urlParams = new URLSearchParams(window.location.search);
+    const side = urlParams.get("side"); // input, left, right
 
-    locationInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            const toLocation = locationInput.value.trim();
-            if (!toLocation) return;
-            showResultScreen();
+    const searchScreen = document.getElementById("searchScreen");
+    const resultScreen = document.getElementById("resultScreen");
 
-            // Reset placeholders
-            document.getElementById("trainType").textContent = "–";
-            document.getElementById("trainNumber").textContent = "–";
-            document.getElementById("departureTime").textContent = "–";
-            document.getElementById("arrivalTime").textContent = "–";
-            document.getElementById("apiDestination").textContent = "Loading…";
-            document.getElementById("trackInfo").textContent = "–";
-            document.getElementById("viaStations").textContent = "–";
-            document.getElementById(
-                "destinationImageCell"
-            ).innerHTML = `<span style="color:#999;">Loading…</span>`;
+    // -------------------
+    // LEFT / RIGHT MONITORS
+    // -------------------
+    if (side === "left" || side === "right") {
+        let startCol = side === "left" ? 1 : 5;
+        let endCol = side === "left" ? 4 : 8;
 
-            loadData(toLocation);
-        }
-    });
+        const allCells = document.querySelectorAll(
+            ".departure-board-8x4 .db-cell, #destinationImageCell"
+        );
+        allCells.forEach((cell) => {
+            const gridColumn = cell.style.gridColumn;
+            if (gridColumn) {
+                const parts = gridColumn.split("/");
+                const start = parseInt(parts[0]);
+                const span = parts[1]
+                    ? parseInt(parts[1].replace("span", "").trim())
+                    : 1;
+                const end = parts[1] ? start + span - 1 : start;
+                if (end < startCol || start > endCol)
+                    cell.style.display = "none";
+            }
+        });
 
-    // Escape to go back
-    document.addEventListener("keydown", (e) => {
-        if (
-            e.key === "Escape" &&
-            document.getElementById("resultScreen").style.display === "flex"
-        ) {
-            showSearchScreen();
-            locationInput.focus();
-        }
-    });
+        searchScreen.style.display = "none";
+        resultScreen.style.display = "flex";
+
+        // Receive data from input monitor
+        window.addEventListener("message", (event) => {
+            if (event.data.destination) loadData(event.data.destination);
+        });
+    }
+
+    // -------------------
+    // INPUT MONITOR
+    // -------------------
+    if (side === "input") {
+        searchScreen.style.display = "flex";
+        resultScreen.style.display = "none";
+
+        const locationInput = document.getElementById("locationInput");
+        let leftMonitor, rightMonitor;
+
+        // Press Enter to open monitors and send data
+        locationInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                const destination = locationInput.value.trim();
+                if (!destination) return;
+
+                // Open monitors only after user action
+                if (!leftMonitor || leftMonitor.closed) {
+                    leftMonitor = window.open(
+                        "index.html?side=left",
+                        "leftMonitor",
+                        "width=1920,height=1080"
+                    );
+                }
+                if (!rightMonitor || rightMonitor.closed) {
+                    rightMonitor = window.open(
+                        "index.html?side=right",
+                        "rightMonitor",
+                        "width=1920,height=1080"
+                    );
+                }
+
+                // Send destination to both monitors
+                if (leftMonitor && !leftMonitor.closed)
+                    leftMonitor.postMessage({ destination }, "*");
+                if (rightMonitor && !rightMonitor.closed)
+                    rightMonitor.postMessage({ destination }, "*");
+            }
+        });
+    }
 });
