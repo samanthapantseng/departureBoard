@@ -57,6 +57,18 @@
     pointer-events: none;
 }
 
+.simple-carousel .item .arrival-time {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 4px;
+    font-size: 60px;
+    pointer-events: none;
+}
+
 .simple-carousel .item img {
     height: 100%;
     width: auto;

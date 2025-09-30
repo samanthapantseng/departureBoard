@@ -58,7 +58,12 @@ async function updateDepartureBoard(connection, destinationInput) {
         ) {
             // Remove origin and destination for this section
             const stops = section.journey.passList.slice(1, -1);
-            allStops = allStops.concat(stops.map((stop) => stop.station.name));
+            allStops = allStops.concat(
+                stops.map((stop) => {
+                    stop.station.arrival = stop.arrival;
+                    return stop.station;
+                })
+            );
         }
     });
 
@@ -91,28 +96,28 @@ async function updateDepartureBoard(connection, destinationInput) {
 
     const bannedStations = ["Bahn-2000-Strecke"];
 
-    let via = allStops.filter((stop) => majorStations.includes(stop));
+    let via = allStops.filter((stop) => majorStations.includes(stop.name));
     if (via.length < 4) {
         via = [
             ...via,
             ...allStops.filter(
                 (stop) =>
-                    !majorStations.includes(stop) &&
-                    !bannedStations.includes(stop)
+                    !majorStations.includes(stop.name) &&
+                    !bannedStations.includes(stop.name)
             ),
         ];
     }
     via = via.slice(0, 4);
 
     document.getElementById("viaStations").innerHTML = via
-        .map((stop) => `<span class="db-stop">${stop}</span>`)
+        .map((stop) => `<span class="db-stop">${stop.name}</span>`)
         .join(" ");
 
     // Debug: show all stops and which ones are highlighted
     console.log("All stops from passList:", allStops);
     console.log("Highlighted major stations (via):", via);
 
-    const imagePromises = via.map((stop) => fetchUnsplashImage(stop));
+    const imagePromises = via.map((stop) => fetchUnsplashImage(stop.name));
     const images = await Promise.all(imagePromises);
 
     const imageCell = document.getElementById("destinationImageCell");
@@ -154,22 +159,6 @@ async function loadData(toLocation) {
         if (!response.ok)
             throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
-
-        //Debug passList
-        data.connections.forEach((conn, i) => {
-            conn.sections.forEach((section, j) => {
-                if (section.journey && section.journey.passList) {
-                    console.log(
-                        `Connection ${i + 1}, Section ${j + 1} passList:`,
-                        section.journey.passList.map((stop) => ({
-                            station: stop.station.name,
-                            arrival: stop.arrival,
-                            departure: stop.departure,
-                        }))
-                    );
-                }
-            });
-        });
 
         const connection =
             data.connections && data.connections.length > 0

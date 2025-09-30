@@ -40,8 +40,21 @@ class SimpleCarousel {
             if (this.labels.length > 0) {
                 const labelDiv = document.createElement("div");
                 labelDiv.className = "label";
-                labelDiv.textContent = this.labels[index];
+                labelDiv.textContent = this.labels[index].name;
                 item.appendChild(labelDiv);
+                if (this.labels[index].arrival) {
+                    const arrivalDiv = document.createElement("div");
+                    arrivalDiv.className = "arrival-time";
+                    const date = new Date(this.labels[index].arrival);
+                    const hours = date.getHours().toString().padStart(2, "0");
+                    const minutes = date
+                        .getMinutes()
+                        .toString()
+                        .padStart(2, "0");
+                    const time = `${hours}:${minutes}`;
+                    arrivalDiv.textContent = time;
+                    item.appendChild(arrivalDiv);
+                }
             }
 
             fragment.appendChild(item);
