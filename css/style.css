@@ -7,18 +7,18 @@
 }
 
 .h1 {
-    font-size: var(--step-4);
+    font-size: 160px;
     font-weight: 800;
     line-height: 1.1;
     text-transform: capitalize;
 }
 .h2 {
-    font-size: var(--step-3);
+    font-size: 80px;
     font-weight: 700;
     line-height: 1.15;
 }
 .h3 {
-    font-size: var(--step-2);
+    font-size: 60px;
     font-weight: 600;
     line-height: 1.18;
 }

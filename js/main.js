@@ -117,12 +117,17 @@ async function updateDepartureBoard(connection, destinationInput) {
     console.log("All stops from passList:", allStops);
     console.log("Highlighted major stations (via):", via);
 
-    const imagePromises = via.map((stop) => fetchUnsplashImage(stop.name));
+    const destinationStop = { name: apiDestination };
+    const allStopsImages = [...via, destinationStop];
+
+    const imagePromises = allStopsImages.map((stop) =>
+        fetchUnsplashImage(stop.name)
+    );
     const images = await Promise.all(imagePromises);
 
     const imageCell = document.getElementById("destinationImageCell");
     if (images && imageCell) {
-        new SimpleCarousel(imageCell, images, via, {
+        new SimpleCarousel(imageCell, images, allStopsImages, {
             gap: 16,
             height: 800,
         });
